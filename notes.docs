@@ -1,0 +1,67 @@
+Express middleware
+    Middleware is the function between the time server gets the request and
+    the server sends the response to user. 
+e.g. request is getting sent by you and response that you're sending back.
+next used to run the next piece of middleware. But in actual,
+there is no point of calling it.bc there is no any middleware.
+    To use this middleware, there are various methods .
+    
+    1)Global middleware.
+    app.use(middleware_name)
+
+NOTE: The middleware runs in order that you define it.`
+But if we use next in that action,then that route will run
+the upcoming middleware. 
+    
+     2)specific to single action :
+     In  app.get/any method accepts two  things. one is the path
+     and a list of middlewares which is our normal request.
+eg. app.get('/users',auth,(req,res)=>{
+console.log('users page');
+res.send('User page');
+})
+
+function auth(req,res,next){ 
+    console.log("Log");
+    next();
+}
+NOTE: The middleware can access the request and 
+response parameters. And if we want to exit out the function use return. 
+eg. to check the user is authenticated or not?
+we can do it by like this:
+
+function auth(req,res,next){ 
+     if(req.query.admin==="true"){
+         next(); // this next will give access to the user page.
+     }
+    console.log("Log");
+    next();
+}
+
+
+> JWT :-  
+JWT Playground: https://jwt.io/
+
+(JSON WEB TOKEN) -->used for authorization.
+ in jwt the user information is stored in the token itself and not on the server. 
+
+> authorization:
+    sends req to the server is the same user that actually logged in during the authentication process,using session, session ID. Client make a request and send the session ID to the server. Server checks into memory and then does the authorization.
+
+> authentication : Its like login.
+
+JWT has 3 parts : header,payload,signature.
+
+>header: The algorithm you are actually using to encode 
+and decode.
+
+>payload : the data which you sent it down to user.
+
+>Verify signature:Verify that user did not mess with the token before it got sent back to you. take first 2 portions ,header and payload combines them together. 
+
+>Algorithm:HS256.
+// hashing algorithms are one way algorithms . they are not reversible.
+
+
+// without middleware  -----> new request ---> run route handler
+// with middleware     -----> new request ---> do something --->run route handler
